@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Explorer — Famous Places & Items</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  
+  <!-- BEAUTIFUL FULL-SCREEN LANDING PAGE -->
+  <div id="landing-page" class="landing-page">
+    <div class="landing-page__overlay"></div>
+    <div class="landing-page__content">
+      <span class="landing-page__icon">🌍</span>
+      <h1 class="landing-page__title">Travel Explorer</h1>
+      <p class="landing-page__subtitle">Discover iconic monuments, rich cultures, and the finest local cuisines across the globe.</p>
+      <button id="start-btn" class="landing-page__btn">Start Exploring</button>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="header__inner">
+      <a href="#" class="logo" id="logo-link">
+        <span class="logo__icon">✈</span>
+        <span class="logo__text">Travel Explorer</span>
+      </a>
+      <p class="tagline">Discover famous locations & must-try items</p>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero / Home View -->
+    <section class="hero" id="home-view">
+      <div class="hero__content">
+        <h1>Where do you want to visit?</h1>
+        <p class="hero__subtitle">Pick a destination and explore its iconic landmarks, hidden gems, and famous local specialties.</p>
+
+        <div class="search-box">
+          <label for="search-input" class="visually-hidden">Search destinations</label>
+          <span class="search-box__icon" aria-hidden="true">🔍</span>
+          <input
+            type="search"
+            id="search-input"
+            placeholder="Search Paris, Tokyo, Jaipur..."
+            autocomplete="off"
+          >
+          <ul class="search-results" id="search-results" hidden></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Destinations View (Countries) -->
+    <section class="popular" id="popular-section">
+      <h2>Popular Destinations</h2>
+      <div class="destination-grid" id="destination-grid"></div>
+    </section>
+
+    <!-- States / Regions View (Middle Tier) -->
+    <section class="popular" id="states-view" hidden>
+      <button class="back-btn" id="back-to-countries-btn" type="button">
+        <span aria-hidden="true">←</span> Back to Countries
+      </button>
+      <h2 id="states-section-title">States & Regions</h2>
+      <div class="destination-grid" id="states-grid"></div>
+    </section>
+
+    <!-- Detail View (Places, Food, Hotels, Restaurants) -->
+    <section class="detail" id="detail-view" hidden>
+      <button class="back-btn" id="back-btn" type="button">
+        <span aria-hidden="true">←</span> Back to states
+      </button>
+
+      <div class="detail__hero" id="detail-hero">
+        <div class="detail__hero-overlay"></div>
+        <div class="detail__hero-content">
+          <span class="detail__country" id="detail-country"></span>
+          <h1 class="detail__title" id="detail-title"></h1>
+          <p class="detail__tagline" id="detail-tagline"></p>
+        </div>
+      </div>
+
+      <div class="detail__body">
+        <p class="detail__intro" id="detail-intro"></p>
+
+        <div class="detail__columns">
+          <article class="card-section">
+            <div class="card-section__header">
+              <span class="card-section__icon" aria-hidden="true">📍</span>
+              <h2>Famous Locations</h2>
+            </div>
+            <ul class="item-list" id="locations-list"></ul>
+          </article>
+
+          <article class="card-section">
+            <div class="card-section__header">
+              <span class="card-section__icon" aria-hidden="true">⭐</span>
+              <h2>Famous Items & Food</h2>
+            </div>
+            <ul class="item-list" id="items-list"></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Travel Explorer — See the World with your eyes.</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
