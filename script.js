@@ -145,35 +145,60 @@ function showHome() {
 }
 
 // --- DEEP SEARCH LOGIC ---
+function normalizeText(value) {
+  return String(value ?? "").trim().toLowerCase();
+}
+
+function looksLikeMatch(text, query) {
+  return normalizeText(text).includes(query);
+}
+
 function filterDestinations(query) {
-  const q = query.trim().toLowerCase();
+  const q = normalizeText(query);
   if (!q) return [];
 
   const matches = [];
+  const seen = new Set();
 
-  COUNTRIES_DATA.forEach(country => {
-    const countryMatch = country.name.toLowerCase().includes(q);
+  COUNTRIES_DATA.forEach((country) => {
+    const countryMatch = looksLikeMatch(country.name, q);
 
-    country.states.forEach(state => {
-      const stateMatch = state.name.toLowerCase().includes(q);
-      
-      // Search inside locations and food items
-      const locMatch = state.locations.some(l => l.name.toLowerCase().includes(q) || (l.food && l.food.toLowerCase().includes(q)));
-      const itemMatch = state.items.some(i => i.name.toLowerCase().includes(q) || (i.description && i.description.toLowerCase().includes(q)));
+    country.states.forEach((state) => {
+      const stateMatch = looksLikeMatch(state.name, q);
+      const locationMatch = state.locations.some((location) => {
+        return (
+          looksLikeMatch(location.name, q) ||
+          looksLikeMatch(location.food, q) ||
+          looksLikeMatch(location.description, q) ||
+          looksLikeMatch(location.hotel, q) ||
+          looksLikeMatch(location.restaurant, q)
+        );
+      });
+      const itemMatch = state.items.some((item) => {
+        return (
+          looksLikeMatch(item.name, q) ||
+          looksLikeMatch(item.description, q)
+        );
+      });
 
-      if (countryMatch || stateMatch || locMatch || itemMatch) {
-        let hint = "Region Match";
-        if (locMatch) hint = "Place/Food Match";
-        if (itemMatch) hint = "Food Item Match";
+      if (!countryMatch && !stateMatch && !locationMatch && !itemMatch) return;
 
-        matches.push({
-          stateId: state.id,
-          countryId: country.id,
-          name: state.name,
-          country: country.name,
-          hint: hint
-        });
-      }
+      const key = `${country.id}:${state.id}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      let hint = "Region Match";
+      if (countryMatch && !stateMatch && !locationMatch && !itemMatch) hint = "Country Match";
+      if (locationMatch) hint = "Place/Food Match";
+      if (itemMatch && !locationMatch) hint = "Food Item Match";
+
+      matches.push({
+        stateId: state.id,
+        countryId: country.id,
+        name: state.name,
+        country: country.name,
+        hint: hint
+      });
     });
   });
 
@@ -181,6 +206,8 @@ function filterDestinations(query) {
 }
 
 function showSearchResults(matches) {
+  if (!searchResults) return;
+
   if (matches.length === 0) {
     searchResults.innerHTML = `<li><p class="empty-state">No places or food found</p></li>`;
     searchResults.hidden = false;
@@ -205,47 +232,48 @@ function showSearchResults(matches) {
 }
 
 function hideSearchResults() {
+  if (!searchResults) return;
   searchResults.hidden = true;
   searchResults.innerHTML = "";
 }
 
-// Search input typing listener
-searchInput.addEventListener("input", () => {
-  const matches = filterDestinations(searchInput.value);
-  if (searchInput.value.trim()) {
-    showSearchResults(matches);
-  } else {
-    hideSearchResults();
-  }
-});
-
-// Search input "Enter" key listener
-searchInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
     const matches = filterDestinations(searchInput.value);
-    if (matches.length > 0) {
-      const bestMatch = matches[0];
-      currentCountry = COUNTRIES_DATA.find(c => c.id === bestMatch.countryId);
-      showDetail(bestMatch.stateId);
+    if (searchInput.value.trim()) {
+      showSearchResults(matches);
+    } else {
       hideSearchResults();
-      searchInput.value = "";
-      searchInput.blur();
     }
-  }
-});
+  });
 
-// Clicking on a search result
-searchResults.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-state-id]");
-  if (button) {
-    currentCountry = COUNTRIES_DATA.find(c => c.id === button.dataset.countryId);
-    showDetail(button.dataset.stateId);
-    hideSearchResults();
-    searchInput.value = "";
-  }
-});
+  searchInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const matches = filterDestinations(searchInput.value);
+      if (matches.length > 0) {
+        const bestMatch = matches[0];
+        currentCountry = COUNTRIES_DATA.find(c => c.id === bestMatch.countryId);
+        showDetail(bestMatch.stateId);
+        hideSearchResults();
+        searchInput.value = "";
+        searchInput.blur();
+      }
+    }
+  });
+}
 
-// Clicking outside search closes the menu
+if (searchResults) {
+  searchResults.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-state-id]");
+    if (button) {
+      currentCountry = COUNTRIES_DATA.find(c => c.id === button.dataset.countryId);
+      showDetail(button.dataset.stateId);
+      hideSearchResults();
+      if (searchInput) searchInput.value = "";
+    }
+  });
+}
+
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".search-box")) hideSearchResults();
 });
@@ -279,16 +307,22 @@ if (backToCountriesBtn) {
   backToCountriesBtn.addEventListener("click", showHome);
 }
 
-backBtn.addEventListener("click", () => {
-  detailView.hidden = true;
-  statesView.hidden = false;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-});
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    if (currentCountry) {
+      showStates(currentCountry.id);
+    } else {
+      showHome();
+    }
+  });
+}
 
-logoLink.addEventListener("click", (event) => {
-  event.preventDefault();
-  showHome();
-});
+if (logoLink) {
+  logoLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    showHome();
+  });
+}
 
 // Location map click handler
 document.getElementById("locations-list").addEventListener("click", (event) => {

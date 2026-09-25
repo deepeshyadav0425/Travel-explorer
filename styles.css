@@ -497,7 +497,7 @@ body::after {
   position: relative;
   padding: 5rem 1.5rem 3rem;
   text-align: center;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .hero::before {
@@ -542,6 +542,7 @@ body::after {
   position: relative;
   max-width: 520px;
   margin: 0 auto;
+  z-index: 30;
 }
 
 .search-box__icon {
@@ -597,7 +598,7 @@ body::after {
   border-radius: var(--radius);
   box-shadow: var(--shadow-xl);
   overflow: hidden;
-  z-index: var(--z-dropdown);
+  z-index: 999;
   animation: dropdown-in 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
