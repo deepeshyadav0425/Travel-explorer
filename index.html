@@ -13,12 +13,35 @@
   
   <!-- BEAUTIFUL FULL-SCREEN LANDING PAGE -->         
   <div id="landing-page" class="landing-page">
+    <!-- Animated Background Layers -->
+    <div class="landing-page__bg" aria-hidden="true">
+      <div class="landing-page__bg-layer" style="background-image: url('images/taj..jpg')"></div>
+      <div class="landing-page__bg-layer" style="background-image: url('images/rajasthan.jpg')"></div>
+      <div class="landing-page__bg-layer" style="background-image: url('images/kerela.jpg')"></div>
+    </div>
+    
+    <!-- Floating Particles -->
+    <div class="landing-page__particles" aria-hidden="true">
+      <div class="landing-page__particle" style="left: 10%; animation-delay: 0s;"></div>
+      <div class="landing-page__particle" style="left: 20%; animation-delay: -1s;"></div>
+      <div class="landing-page__particle" style="left: 30%; animation-delay: -2s;"></div>
+      <div class="landing-page__particle" style="left: 40%; animation-delay: -3s;"></div>
+      <div class="landing-page__particle" style="left: 50%; animation-delay: -4s;"></div>
+      <div class="landing-page__particle" style="left: 60%; animation-delay: -5s;"></div>
+      <div class="landing-page__particle" style="left: 70%; animation-delay: -6s;"></div>
+      <div class="landing-page__particle" style="left: 80%; animation-delay: -7s;"></div>
+      <div class="landing-page__particle" style="left: 90%; animation-delay: -8s;"></div>
+    </div>
+    
     <div class="landing-page__overlay"></div>
     <div class="landing-page__content">
       <span class="landing-page__icon">🌍</span>
       <h1 class="landing-page__title">Travel Explorer</h1>
       <p class="landing-page__subtitle">Discover iconic monuments, rich cultures, and the finest local cuisines across the globe.</p>
-      <button id="start-btn" class="landing-page__btn">Start Exploring</button>
+      <button id="start-btn" class="landing-page__btn">
+        <span>Start Exploring</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
     </div>
   </div>
 

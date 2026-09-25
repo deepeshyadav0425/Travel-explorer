@@ -36,7 +36,7 @@ function renderCountryCards(countries) {
         <div class="destination-card__image" style="background-image: url('${country.image}')"></div>
         <div class="destination-card__overlay"></div>
         <div class="destination-card__content">
-          <p class="destination-card__country">Country</p>
+          <span class="destination-card__country">Country</span>
           <h3 class="destination-card__name">${country.name}</h3>
         </div>
       </button>
@@ -58,7 +58,7 @@ function showStates(countryId) {
         <div class="destination-card__image" style="background-image: url('${state.image}')"></div>
         <div class="destination-card__overlay"></div>
         <div class="destination-card__content">
-          <p class="destination-card__country">${currentCountry.name}</p>
+          <span class="destination-card__country">${currentCountry.name}</span>
           <h3 class="destination-card__name">${state.name}</h3>
         </div>
       </button>
@@ -301,5 +301,20 @@ document.getElementById("locations-list").addEventListener("click", (event) => {
 window.addEventListener("DOMContentLoaded", () => {
   if (typeof COUNTRIES_DATA !== "undefined") {
     renderCountryCards(COUNTRIES_DATA);
+  }
+  
+  // Header scroll effect
+  const header = document.querySelector('.header');
+  if (header) {
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
   }
 });
