@@ -32,7 +32,7 @@ const COUNTRIES_DATA = [
           {
             name: "Lepakshi Veerabhadra Temple",
             description: "A 16th-century Vijayanagara architectural masterpiece famous for its hanging pillar and monolithic Nandi.",
-            image: "https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&q=80",
+            image: "images/lepakshi veerabhadra temple.jpg",
             food: "Gongura Royyalu, Bobbatlu",
             hotel: "Haritha Hotel Hindupur",
             restaurant: "Aharanam Restaurant"
